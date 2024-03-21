@@ -9,5 +9,4 @@ public class TestSbFactorialApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TestSbFactorialApplication.class, args);
 	}
-
 }
