@@ -7,43 +7,49 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FactorialService {
     public static class FactorialRequest {
-        private int factorial_num;
+        private long factorial_num;
 
-        public int getFactorial_num() {
+        public long getFactorial_num() {
             return factorial_num;
         }
 
-        public void setFactorial_num(int factorial_num) {
+        public void setFactorial_num(long factorial_num) {
             this.factorial_num = factorial_num;
         }
     }
 
     public static class FactorialResponse {
-        private int result;
+        private long result;
 
-        public FactorialResponse(int result) {
+        public FactorialResponse(long result) {
             this.result = result;
         }
 
-        public int getResult() {
+        public long getResult() {
             return result;
         }
 
-        public void setResult(int result) {
+        public void setResult(long result) {
             this.result = result;
         }
     }
 
     public FactorialResponse calculate(FactorialRequest request) {
-        int result = calculateFactorial(request.getFactorial_num());
+        long result = calculateFactorial(request.getFactorial_num());
         return new FactorialResponse(result);
     }
 
-    private int calculateFactorial(int num) {
-        if (num == 0) {
+    private long calculateFactorial(long num) {
+        if (num < 0){
+            throw new IllegalArgumentException("число должно быть больше либо равно 0");
+        }if (num >= 64){
+            // для решения проблемы вычисления факториала числа больше 63 можно воспользоваться BigInteger
+            throw new IllegalArgumentException("число слишком большое. Максимально допустипое значение: 63");
+        }else if (num == 0) {
             return 1;
+        } else {
+            return num * calculateFactorial(num - 1);
         }
-        return num * calculateFactorial(num - 1);
     }
 }
 
