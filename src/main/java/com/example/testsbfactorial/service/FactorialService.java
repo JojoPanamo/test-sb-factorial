@@ -1,11 +1,14 @@
 package com.example.testsbfactorial.service;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class FactorialService {
+    private final MeterRegistry meterRegistry;
     public static class FactorialRequest {
         private long factorial_num;
 
@@ -35,11 +38,16 @@ public class FactorialService {
     }
 
     public FactorialResponse calculate(FactorialRequest request) {
+        Timer.Sample sample = Timer.start(meterRegistry);
         long result = calculateFactorial(request.getFactorial_num());
+        sample.stop(Timer.builder("factorial.calculation.time")
+                .description("Time taken to calculate factorial")
+                .tag("factorial", String.valueOf(request.getFactorial_num()))
+                .register(meterRegistry));
         return new FactorialResponse(result);
     }
 
-    private long calculateFactorial(long num) {
+    protected long calculateFactorial(long num) {
         if (num < 0){
             throw new IllegalArgumentException("число должно быть больше либо равно 0");
         }if (num >= 64){
