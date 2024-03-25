@@ -16,15 +16,12 @@ public class FactorialController {
 
     @PostMapping("/calculate")
     public ResponseEntity<?> calculateFactorial(@RequestBody FactorialService.FactorialRequest request) {
-        // Проверяем, что число неотрицательное
         if (request.getFactorial_num() < 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ошибка, число должно быть больше лиюо равно 0");
-        }else if(request.getFactorial_num() >= 64 ){
+        } else if (request.getFactorial_num() >= 64) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ошибка, число слишком большое. Максимально допустипое значение: 63");
         }
-        // Вычисляем факториал
         long result = factorialService.calculate(request).getResult();
-        // Возвращаем результат
         return ResponseEntity.ok(new FactorialService.FactorialResponse(result));
     }
 }

@@ -9,6 +9,31 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FactorialService {
     private final MeterRegistry meterRegistry;
+
+    public FactorialResponse calculate(FactorialRequest request) {
+        Timer.Sample sample = Timer.start(meterRegistry);
+        long result = calculateFactorial(request.getFactorial_num());
+        sample.stop(Timer.builder("factorial.calculation.time")
+                .description("Time taken to calculate factorial")
+                .tag("factorial", String.valueOf(request.getFactorial_num()))
+                .register(meterRegistry));
+        return new FactorialResponse(result);
+    }
+
+    protected long calculateFactorial(long num) {
+        if (num < 0) {
+            throw new IllegalArgumentException("число должно быть больше либо равно 0");
+        }
+        if (num >= 64) {
+            // для решения проблемы вычисления факториала числа больше 63 можно воспользоваться BigInteger
+            throw new IllegalArgumentException("число слишком большое. Максимально допустипое значение: 63");
+        } else if (num == 0) {
+            return 1;
+        } else {
+            return num * calculateFactorial(num - 1);
+        }
+    }
+
     public static class FactorialRequest {
         private long factorial_num;
 
@@ -34,29 +59,6 @@ public class FactorialService {
 
         public void setResult(long result) {
             this.result = result;
-        }
-    }
-
-    public FactorialResponse calculate(FactorialRequest request) {
-        Timer.Sample sample = Timer.start(meterRegistry);
-        long result = calculateFactorial(request.getFactorial_num());
-        sample.stop(Timer.builder("factorial.calculation.time")
-                .description("Time taken to calculate factorial")
-                .tag("factorial", String.valueOf(request.getFactorial_num()))
-                .register(meterRegistry));
-        return new FactorialResponse(result);
-    }
-
-    protected long calculateFactorial(long num) {
-        if (num < 0){
-            throw new IllegalArgumentException("число должно быть больше либо равно 0");
-        }if (num >= 64){
-            // для решения проблемы вычисления факториала числа больше 63 можно воспользоваться BigInteger
-            throw new IllegalArgumentException("число слишком большое. Максимально допустипое значение: 63");
-        }else if (num == 0) {
-            return 1;
-        } else {
-            return num * calculateFactorial(num - 1);
         }
     }
 }
