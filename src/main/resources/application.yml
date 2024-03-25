@@ -1,5 +1,11 @@
+spring:
+  application:
+    name: test-sb-factorial
 management:
-  endpoints.web.exposure.include: 'prometheus, health'
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus, health'
   metrics:
     distribution:
       percentiles-histogram:

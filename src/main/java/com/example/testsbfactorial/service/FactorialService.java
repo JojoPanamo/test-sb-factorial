@@ -23,8 +23,7 @@ public class FactorialService {
     protected long calculateFactorial(long num) {
         if (num < 0) {
             throw new IllegalArgumentException("число должно быть больше либо равно 0");
-        }
-        if (num >= 64) {
+        } else if (num >= 64) {
             // для решения проблемы вычисления факториала числа больше 63 можно воспользоваться BigInteger
             throw new IllegalArgumentException("число слишком большое. Максимально допустипое значение: 63");
         } else if (num == 0) {
@@ -47,7 +46,7 @@ public class FactorialService {
     }
 
     public static class FactorialResponse {
-        private long result;
+        private final long result;
 
         public FactorialResponse(long result) {
             this.result = result;
@@ -56,10 +55,5 @@ public class FactorialService {
         public long getResult() {
             return result;
         }
-
-        public void setResult(long result) {
-            this.result = result;
-        }
     }
 }
-
