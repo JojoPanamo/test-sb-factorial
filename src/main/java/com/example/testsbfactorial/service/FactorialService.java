@@ -32,28 +32,4 @@ public class FactorialService {
             return num * calculateFactorial(num - 1);
         }
     }
-
-    public static class FactorialRequest {
-        private long factorial_num;
-
-        public long getFactorial_num() {
-            return factorial_num;
-        }
-
-        public void setFactorial_num(long factorial_num) {
-            this.factorial_num = factorial_num;
-        }
-    }
-
-    public static class FactorialResponse {
-        private final long result;
-
-        public FactorialResponse(long result) {
-            this.result = result;
-        }
-
-        public long getResult() {
-            return result;
-        }
-    }
 }

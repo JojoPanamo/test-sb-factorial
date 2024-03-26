@@ -1,5 +1,7 @@
 package com.example.testsbfactorial.controllers;
 
+import com.example.testsbfactorial.service.FactorialRequest;
+import com.example.testsbfactorial.service.FactorialResponse;
 import com.example.testsbfactorial.service.FactorialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,8 @@ public class FactorialController {
     private final FactorialService factorialService;
 
     @PostMapping("/calculate")
-    public ResponseEntity<FactorialService.FactorialResponse> calculateFactorial(@RequestBody FactorialService.FactorialRequest request) {
-        FactorialService.FactorialResponse response = factorialService.calculate(request);
+    public ResponseEntity<FactorialResponse> calculateFactorial(@RequestBody FactorialRequest request) {
+        FactorialResponse response = factorialService.calculate(request);
         return ResponseEntity.ok(response);
     }
 }
